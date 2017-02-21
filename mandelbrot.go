@@ -11,25 +11,26 @@ import (
 
 const IMAGE_HEIGHT int = 1080
 const IMAGE_WIDTH int = 1920
-
+const C_INCREMENT float64 = 0.001
+const GRAPH_RANGE float64 = 2.0
+const C_SEED complex128 = 0.00
 
 type Point struct {
 	X, Y float64
 }
 
 func main() {
-	tests()
+	//tests()
 	img := image.NewRGBA(image.Rect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT))
-
-	for x := -2.00; x < 2; x += 0.001 {
-		for y := -2.00; y < 2; y += 0.001 {
-			if isTendToInf(0, complex(y, x)){
-				img.Set(IMAGE_WIDTH/2 + int(x/2 * float64(IMAGE_WIDTH/2)), IMAGE_HEIGHT/2 + int(y/2 * float64(IMAGE_HEIGHT/2)),color.RGBA{0, 0, 255, 255})
-	
+	for x := -1 * GRAPH_RANGE; x < GRAPH_RANGE; x += C_INCREMENT {
+		for y := -1 * GRAPH_RANGE; y < GRAPH_RANGE; y += C_INCREMENT {
+			if isTendToInf(C_SEED, complex(y, x)){
+				img.Set(IMAGE_WIDTH/2 + int(x/GRAPH_RANGE * float64(IMAGE_WIDTH/2)), 
+					IMAGE_HEIGHT/2 + int(y/GRAPH_RANGE * float64(IMAGE_HEIGHT/2)), 
+					color.RGBA{0, 0, 255, 255})
 			}
 		}
 	}	
-
 	f, _ := os.OpenFile("out.png", os.O_WRONLY|os.O_CREATE, 0600)
     defer f.Close()
     png.Encode(f, img)

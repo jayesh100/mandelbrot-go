@@ -33,7 +33,6 @@ func main() {
 		//fmt.Printf("Drawing point @ { %v, %v }", int(i.X/2 * 1920),int(i.Y/2 * 1080))
 		img.Set(int(i.X/2 * float64(IMAGE_WIDTH)), int(i.Y/2 * float64(IMAGE_HEIGHT)),color.RGBA{0, 0, 255, 255})
 	}
-	//img.Set(2, 3, color.RGBA{0, 0, 255, 255})
 
 	f, _ := os.OpenFile("out.png", os.O_WRONLY|os.O_CREATE, 0600)
     defer f.Close()

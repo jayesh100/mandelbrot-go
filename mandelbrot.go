@@ -36,12 +36,12 @@ func main() {
     png.Encode(f, img)
 }
 
-func computeNext(z complex128, c complex128) complex128{
+func computeNext(z complex128, c complex128) complex128 {
 	return z * z + c
 }
 
 func isTendToInf(z complex128, c complex128) bool {
-	for i:= 0; i < 1000; i++ {
+	for i:= 0; i < 300; i++ {
 		z = computeNext(z, c)
 		if cmplx.IsInf(z) {
 			return true

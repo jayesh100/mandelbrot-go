@@ -9,9 +9,9 @@ import (
 	"image"
 )
 
-const IMAGE_HEIGHT int = 1080
-const IMAGE_WIDTH int = 1920
-const C_INCREMENT float64 = 0.001
+const IMAGE_HEIGHT int = 3240
+const IMAGE_WIDTH int = 5760
+const C_INCREMENT float64 = 0.0005
 const GRAPH_RANGE float64 = 2.0
 const C_SEED complex128 = 0.00
 

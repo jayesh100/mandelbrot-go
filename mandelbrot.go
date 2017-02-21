@@ -19,21 +19,16 @@ type Point struct {
 
 func main() {
 	tests()
-	var grid []Point = make([]Point, 1, 1)
 	img := image.NewRGBA(image.Rect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT))
 
 	for x := -2.00; x < 2; x += 0.001 {
 		for y := -2.00; y < 2; y += 0.001 {
 			if isTendToInf(0, complex(y, x)){
-				grid = append(grid, Point{x, y})
+				img.Set(IMAGE_WIDTH/2 + int(x/2 * float64(IMAGE_WIDTH/2)), IMAGE_HEIGHT/2 + int(y/2 * float64(IMAGE_HEIGHT/2)),color.RGBA{0, 0, 255, 255})
+	
 			}
 		}
 	}	
-
-	for _, i := range grid {
-		//fmt.Printf("Drawing point @ { %v, %v }", int(i.X/2 * 1920),int(i.Y/2 * 1080))
-		img.Set(IMAGE_WIDTH/2 + int(i.X/2 * float64(IMAGE_WIDTH)), IMAGE_HEIGHT/2 + int(i.Y/2 * float64(IMAGE_HEIGHT)),color.RGBA{0, 0, 255, 255})
-	}
 
 	f, _ := os.OpenFile("out.png", os.O_WRONLY|os.O_CREATE, 0600)
     defer f.Close()

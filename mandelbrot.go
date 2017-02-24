@@ -14,7 +14,7 @@ const IMAGE_HEIGHT int = 3240
 const IMAGE_WIDTH int = 5760
 const C_INCREMENT float64 = 0.0005
 const GRAPH_RANGE float64 = 2.0
-const C_SEED complex128 = 0.00
+const C_SEED complex128 = 0.0099
 
 type Point struct {
 	X, Y float64
@@ -23,10 +23,11 @@ type Point struct {
 func iterateAndDraw(x_min float64, x_max float64, y_min float64, y_max float64, img *image.RGBA) {
 	for x := x_min; x < x_max; x += C_INCREMENT {
 		for y := y_min; y < y_max; y += C_INCREMENT {
-			if isTendToInf(C_SEED, complex(y, x)){
+			inf, colour := isTendToInf(C_SEED, complex(y, x))
+			if inf {
 				img.Set(IMAGE_WIDTH/2 + int(x/GRAPH_RANGE * float64(IMAGE_WIDTH/2)), 
 					IMAGE_HEIGHT/2 + int(y/GRAPH_RANGE * float64(IMAGE_HEIGHT/2)), 
-					color.RGBA{0, 0, 255, 255})
+					colour)
 			}
 		}
 	}
@@ -69,14 +70,27 @@ func computeNext(z complex128, c complex128) complex128 {
 	return z * z + c
 }
 
-func isTendToInf(z complex128, c complex128) bool {
+func isTendToInf(z complex128, c complex128) (bool, color.RGBA) {
 	for i:= 0; i < 100; i++ {
 		z = computeNext(z, c)
 		if cmplx.IsInf(z) {
-			return true
+			return true, getColour(i)
 		}
 	}
-	return false
+	return false, color.RGBA{0, 0, 0, 255}
+}
+
+func getColour(iterationsInf int) color.RGBA {
+	switch {
+	case iterationsInf < 25:
+		return color.RGBA{0, 0, 255, 255}
+	case iterationsInf < 50:
+		return color.RGBA{0, 255, 0, 255}
+	case iterationsInf < 100:
+		return color.RGBA{255, 0, 0, 255}
+	default:
+		return color.RGBA{0, 0, 255, 255}
+	}
 }
 
 // TESTING CODE
@@ -101,8 +115,8 @@ func tests() {
 		fmt.Println("| TEST CASE    |     PASSED |")
 		fmt.Println("-----------------------------")
 		for _, v := range infTest {
-			fmt.Printf("| %v       |       %v |\n", v.test, isTendToInf(0, v.test) == v.result)
+			result, _ := isTendToInf(0, v.test)
+			fmt.Printf("| %v       |       %v |\n", v.test, result == v.result)
 		}
 		fmt.Println()
-
 	}

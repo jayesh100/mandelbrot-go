@@ -7,6 +7,7 @@ import (
 	"image/color"
 	"os"
 	"image"
+	"sync"
 )
 
 const IMAGE_HEIGHT int = 3240
@@ -34,18 +35,30 @@ func iterateAndDraw(x_min float64, x_max float64, y_min float64, y_max float64, 
 func main() {
 	//tests()
 	img := image.NewRGBA(image.Rect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT))
+	var waitGroup sync.WaitGroup	
+	waitGroup.Add(3)
 
 	// 1st Quadrant
-	go iterateAndDraw(0, GRAPH_RANGE, -1 * GRAPH_RANGE, 0, img)
+	go func() {
+		defer waitGroup.Done()
+		iterateAndDraw(0, GRAPH_RANGE, -1 * GRAPH_RANGE, 0, img)
+	} ()
 
 	// 2nd Quadrant
-	go iterateAndDraw(-1 * GRAPH_RANGE, 0, -1 * GRAPH_RANGE, 0, img)
-
+	go func() {
+		defer waitGroup.Done()
+		iterateAndDraw(-1 * GRAPH_RANGE, 0, -1 * GRAPH_RANGE, 0, img)
+	} ()
 	// 3rd Quadrant
-	go iterateAndDraw(-1 * GRAPH_RANGE, 0, 0, GRAPH_RANGE, img)
+	go func() {
+		defer waitGroup.Done()
+		iterateAndDraw(-1 * GRAPH_RANGE, 0, 0, GRAPH_RANGE, img)
+	} ()
 
 	// 4th Quadrant
 	iterateAndDraw(0, GRAPH_RANGE, 0, GRAPH_RANGE, img)
+
+	waitGroup.Wait()
 
 	f, _ := os.OpenFile("out.png", os.O_WRONLY|os.O_CREATE, 0600)
 	defer f.Close()

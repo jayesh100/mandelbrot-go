@@ -81,16 +81,7 @@ func isTendToInf(z complex128, c complex128) (bool, color.RGBA) {
 }
 
 func getColour(iterationsInf int) color.RGBA {
-	switch {
-	case iterationsInf < 25:
-		return color.RGBA{0, 0, 255, 255}
-	case iterationsInf < 50:
-		return color.RGBA{0, 255, 0, 255}
-	case iterationsInf < 100:
-		return color.RGBA{255, 0, 0, 255}
-	default:
-		return color.RGBA{0, 0, 255, 255}
-	}
+	return color.RGBA{uint8((iterationsInf*255/100) - 100), uint8((iterationsInf*255/100) - 50), uint8((iterationsInf*255/100) - 25), 255}
 }
 
 // TESTING CODE
@@ -119,4 +110,5 @@ func tests() {
 			fmt.Printf("| %v       |       %v |\n", v.test, result == v.result)
 		}
 		fmt.Println()
+
 	}

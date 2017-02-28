@@ -81,7 +81,8 @@ func isTendToInf(z complex128, c complex128) (bool, color.RGBA) {
 }
 
 func getColour(iterationsInf int) color.RGBA {
-	return color.RGBA{uint8((iterationsInf*255/100) - 100), uint8((iterationsInf*255/100) - 50), uint8((iterationsInf*255/100) - 25), 255}
+	var scaled_var := iterationsInf*255/100
+	return color.RGBA{uint8(scaled_var - 100), uint8(scaled_var - 50), uint8(scaled_var - 25), 255}
 }
 
 // TESTING CODE
